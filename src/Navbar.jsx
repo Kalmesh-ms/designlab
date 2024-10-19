@@ -8,7 +8,7 @@ function Navbar() {
           PLANT KINGDOM
         </div>
 
-        <div className="links flex-column jend grow-1 align-center">
+        <div className="links flex-column jend grow-1 align-center poppins-semibold">
           <div>
             <a href="#" className="no-style">
               EXPLORE

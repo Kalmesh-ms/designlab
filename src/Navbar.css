@@ -6,6 +6,7 @@
   list-style: none;
   font-style: none;
   text-decoration: none;
+  color: white;
 }
 
 .logo {
@@ -41,13 +42,14 @@
 .navbar {
   background: transparent;
   padding: 20px 20px;
-  color: whitesmoke;
+
   box-sizing: border-box;
 }
 
 .links {
   gap: 1.2em;
   font-size: 18px;
+  color: inherit;
 }
 
 .material-icons.md-18 {
