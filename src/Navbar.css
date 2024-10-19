@@ -2,68 +2,8 @@
   display: flex;
 }
 
-.no-style {
-  list-style: none;
-  font-style: none;
-  text-decoration: none;
-  color: white;
-}
+/* SEARCH BAR -------------------- */
 
-.logo {
-  font-size: 24px;
-  font-family: "poppins";
-  letter-spacing: 5px;
-}
-
-.space-btw {
-  justify-content: space-between;
-}
-
-.jcenter {
-  justify-content: center;
-}
-
-.align-center {
-  align-items: center;
-}
-
-.jend {
-  justify-content: end;
-}
-
-.grow-1 {
-  flex-grow: 1;
-}
-
-.grow-2 {
-  flex-grow: 2;
-}
-
-.navbar {
-  background: transparent;
-  padding: 20px 20px;
-
-  box-sizing: border-box;
-}
-
-.links {
-  gap: 1.2em;
-  font-size: 18px;
-  color: inherit;
-}
-
-.material-icons.md-18 {
-  font-size: 18px;
-}
-.material-icons.md-24 {
-  font-size: 24px;
-}
-.material-icons.md-36 {
-  font-size: 36px;
-}
-.material-icons.md-48 {
-  font-size: 48px;
-}
 .search-div {
   position: relative;
   display: flex;
@@ -90,9 +30,79 @@
 }
 
 .search-div.active .input-search {
-  border: 2px solid #ccc; /* Change color when focused */
+  border: 2px solid #bdf5bd; /* Change color when focused */
 }
 
 .search-div.active .search-btn {
-  color: #ccc; /* Change icon color when focused */
+  color: #bdf5bd; /* Change icon color when focused */
+}
+
+/* NAV BAR -------------------- */
+
+.links {
+  list-style: none;
+  font-style: none;
+  text-decoration: none;
+  color: white;
+}
+
+.links:hover {
+  color: #bdf5bd;
+}
+
+.logo {
+  font-size: 28px;
+  font-family: "poppins";
+  letter-spacing: 5px;
+  color: #bdf5bd;
+}
+
+.navbar {
+  background: transparent;
+  padding: 20px 20px;
+  box-sizing: border-box;
+  transition: all 5ms ease;
+}
+
+.nav-links {
+  gap: 1.8em;
+  font-size: 18px;
+  color: inherit;
+  letter-spacing: 2px;
+}
+.space-btw {
+  justify-content: space-between;
+}
+
+.jcenter {
+  justify-content: center;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.jend {
+  justify-content: end;
+}
+
+.grow-1 {
+  flex-grow: 1;
+}
+
+.grow-2 {
+  flex-grow: 2;
+}
+
+.material-icons.md-18 {
+  font-size: 18px;
+}
+.material-icons.md-24 {
+  font-size: 24px;
+}
+.material-icons.md-36 {
+  font-size: 36px;
+}
+.material-icons.md-48 {
+  font-size: 48px;
 }

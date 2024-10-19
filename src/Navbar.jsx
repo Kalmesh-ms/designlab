@@ -8,24 +8,24 @@ function Navbar() {
           PLANT KINGDOM
         </div>
 
-        <div className="links flex-column jend grow-1 align-center poppins-semibold">
+        <div className="nav-links  flex-column jend grow-1 align-center ">
           <div>
-            <a href="#" className="no-style">
+            <a href="#" className="links">
               EXPLORE
             </a>
           </div>
           <div>
-            <a href="#" className="no-style">
+            <a href="#" className="links">
               LEARN
             </a>
           </div>
           <div>
-            <a href="#" className="no-style">
+            <a href="#" className="links">
               ARTICLES
             </a>
           </div>
           <div>
-            <a href="#" className="no-style">
+            <a href="#" className="links">
               DOCS
             </a>
           </div>
