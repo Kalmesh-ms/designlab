@@ -31,7 +31,7 @@ function App() {
           </div>
           <div className="flex-column search-div">
             <input
-              className="input-l input-search"
+              className="input-search"
               placeholder="Search"
               onFocus={() =>
                 document.querySelector(".search-div").classList.add("active")

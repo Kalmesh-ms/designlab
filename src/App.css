@@ -41,13 +41,13 @@
 .navbar {
   background-color: rgb(3, 9, 3);
   padding: 20px 20px;
-  font-size: 24px;
   color: whitesmoke;
   box-sizing: border-box;
 }
 
 .links {
-  gap: 40px;
+  gap: 1.2em;
+  font-size: 18px;
 }
 
 .material-icons.md-18 {
@@ -67,12 +67,14 @@
   display: flex;
   align-items: center;
   border-radius: 30px;
+  width: 300px;
 }
 
 .input-search {
   padding: 10px;
   padding-left: 50px; /* Space for the icon */
   border-radius: inherit;
+  width: inherit;
 }
 
 .input-search:focus {
