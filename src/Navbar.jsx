@@ -1,10 +1,10 @@
-import "./App.css";
+import "./Navbar.css";
 
-function App() {
+function Navbar() {
   return (
     <>
       <div className="navbar flex-column space-btw grow-1">
-        <div className="logo flex-column grow-2 align-center">
+        <div className="logo flex-column grow-2 align-center poppins-bold">
           PLANT KINGDOM
         </div>
 
@@ -48,4 +48,4 @@ function App() {
   );
 }
 
-export default App;
+export default Navbar;
