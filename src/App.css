@@ -1,42 +1,94 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+.flex-column {
+  display: flex;
+}
+
+.no-style {
+  list-style: none;
+  font-style: none;
+  text-decoration: none;
 }
 
 .logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+  font-size: larger;
+  font-family: "poppins";
+  letter-spacing: 3px;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.space-btw {
+  justify-content: space-between;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.jcenter {
+  justify-content: center;
 }
 
-.card {
-  padding: 2em;
+.align-center {
+  align-items: center;
 }
 
-.read-the-docs {
-  color: #888;
+.jend {
+  justify-content: end;
+}
+
+.grow-1 {
+  flex-grow: 1;
+}
+
+.grow-2 {
+  flex-grow: 2;
+}
+
+.navbar {
+  background-color: rgb(3, 9, 3);
+  padding: 20px 20px;
+  font-size: 24px;
+  color: whitesmoke;
+  box-sizing: border-box;
+}
+
+.links {
+  gap: 40px;
+}
+
+.material-icons.md-18 {
+  font-size: 18px;
+}
+.material-icons.md-24 {
+  font-size: 24px;
+}
+.material-icons.md-36 {
+  font-size: 36px;
+}
+.material-icons.md-48 {
+  font-size: 48px;
+}
+.search-div {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-radius: 30px;
+}
+
+.input-search {
+  padding: 10px;
+  padding-left: 50px; /* Space for the icon */
+  border-radius: inherit;
+}
+
+.input-search:focus {
+  outline: none; /* Remove the default focus outline */
+}
+
+.search-btn {
+  position: absolute;
+  left: 10px; /* Adjust based on how close you want the icon to the input edge */
+  pointer-events: none; /* So clicking the icon doesn't interfere with input focus */
+}
+
+.search-div.active .input-search {
+  border: 2px solid #ccc; /* Change color when focused */
+}
+
+.search-div.active .search-btn {
+  color: #ccc; /* Change icon color when focused */
 }
