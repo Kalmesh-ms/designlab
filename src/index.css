@@ -9,6 +9,8 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --light-text-color: #bdf5bd;
 }
 
 body {
@@ -20,8 +22,8 @@ body {
 .herosection {
   height: 100vh;
   background-image: url(./assets/hero.jpg);
-  background-position: center;
-  background-size: auto;
+  background-position: center center;
+  background-size: cover;
   background-repeat: no-repeat;
 }
 

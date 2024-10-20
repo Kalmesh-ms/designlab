@@ -3,7 +3,7 @@ import "./Hero.css";
 export function Hero() {
   return (
     <>
-      <div className="hero"></div>
+      <div className="heroText poppins-bold">WELCOME TO KINDOM OF PLANTS</div>
     </>
   );
 }

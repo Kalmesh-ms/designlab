@@ -30,15 +30,22 @@
 }
 
 .search-div.active .input-search {
-  border: 2px solid #bdf5bd; /* Change color when focused */
+  border: 2px solid var(--light-text-color); /* Change color when focused */
 }
 
 .search-div.active .search-btn {
-  color: #bdf5bd; /* Change icon color when focused */
+  color: var(--light-text-color);
+  /* Change icon color when focused */
 }
 
 /* NAV BAR -------------------- */
 
+.navbar {
+  padding: 20px 20px;
+  box-sizing: border-box;
+  transition: all 5ms ease;
+  backdrop-filter: blur(7px);
+}
 .links {
   list-style: none;
   font-style: none;
@@ -54,13 +61,6 @@
   font-size: 28px;
   letter-spacing: 5px;
   color: #bdf5bd;
-}
-
-.navbar {
-  background: transparent;
-  padding: 20px 20px;
-  box-sizing: border-box;
-  transition: all 5ms ease;
 }
 
 .nav-links {
