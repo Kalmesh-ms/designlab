@@ -40,7 +40,7 @@ function Navbar() {
                 document.querySelector(".search-div").classList.remove("active")
               }
             />
-            <span className="material-icons md-36 search-btn">search</span>
+            <span className="material-icons md-24 search-btn">search</span>
           </div>
         </div>
       </div>
