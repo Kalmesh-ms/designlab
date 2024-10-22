@@ -48,13 +48,13 @@
 }
 .links {
   list-style: none;
-  font-style: none;
   text-decoration: none;
   color: white;
 }
 
 .links:hover {
   color: #bdf5bd;
+  border-bottom: 2px solid #bdf5bd;
 }
 
 .logo {
