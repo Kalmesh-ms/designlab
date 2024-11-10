@@ -1,10 +1,12 @@
+// PlantComponent.js
+
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import "./content.css";
 import { fetchPlantTextData, fetchPlantImageData } from "./temapi";
 
-const PlantComponent = ({ title }) => {
-  const [plantText, setPlantText] = useState("");
+const PlantComponent = ({ title, onDelete }) => {
+  const [plantSections, setPlantSections] = useState({});
   const [thumbnail, setThumbnail] = useState("");
   const [galleryImages, setGalleryImages] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -21,7 +23,12 @@ const PlantComponent = ({ title }) => {
           fetchPlantImageData(title),
         ]);
 
-        setPlantText(textData);
+        if (textData === null) {
+          setError(`No such "${title}" found.`);
+          setPlantSections({});
+        } else {
+          setPlantSections(textData);
+        }
 
         if (imageData && imageData.length > 0) {
           setThumbnail(imageData[0]); // Use the first image as the thumbnail
@@ -46,6 +53,9 @@ const PlantComponent = ({ title }) => {
 
   return (
     <div className="plant-container">
+      <button className="delete-button" onClick={() => onDelete(title)}>
+        &times;
+      </button>
       <h1 className="plant-title">{title}</h1>
       {error ? (
         <p className="error-message">{error}</p>
@@ -62,12 +72,20 @@ const PlantComponent = ({ title }) => {
           )}
 
           <div className="content">
-            <pre className="text-content">{plantText}</pre>
+            {/* Render each section individually */}
+            {Object.entries(plantSections).map(
+              ([sectionTitle, sectionContent]) => (
+                <div key={sectionTitle} className="section">
+                  <h2>{sectionTitle.replace(/_/g, " ")}</h2>
+                  <pre className="text-content">{sectionContent}</pre>
+                </div>
+              )
+            )}
           </div>
 
           {galleryImages.length > 0 && (
             <div className="gallery-container">
-              <h2 className="gallery-title">Gallery</h2>
+              <h2>Gallery</h2>
               <div className="gallery">
                 {galleryImages.map((image, index) => (
                   <img
@@ -89,6 +107,7 @@ const PlantComponent = ({ title }) => {
 
 PlantComponent.propTypes = {
   title: PropTypes.string.isRequired,
+  onDelete: PropTypes.func.isRequired,
 };
 
 export default PlantComponent;
