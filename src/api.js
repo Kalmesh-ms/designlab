@@ -16,8 +16,6 @@ export const fetchPlantPortal = async () => {
         cmlimit: 10,
       },
     });
-    console.log("PORTAL DATA : ", response.data.query.categorymembers);
-    console.log("----------------------------------------------------");
     return response.data.query.categorymembers;
   } catch (error) {
     console.error("Error fetching Plant Portal data:", error);
@@ -46,6 +44,22 @@ export const fetchPlantData = async (title) => {
   }
 };
 
+export const fetchPlantSummary = async (title) => {
+  try {
+    const response = await axios.get(
+      `https://en.wikipedia.org/api/rest_v1/page/summary/${title}`
+    );
+
+    // Access the plain text content
+    const textContent = response.data.extract;
+
+    return textContent;
+  } catch (error) {
+    console.error(`Error fetching ${title} summary data:`, error);
+    return null;
+  }
+};
+
 // 3. Fetch Today's Featured Articles
 export const fetchFeaturedArticle = async () => {
   try {
@@ -58,8 +72,6 @@ export const fetchFeaturedArticle = async () => {
         titles: "Wikipedia:Today's_featured_article",
       },
     });
-    console.log("TODAY FART  : ", Object.values(response.data.query.pages)[0]);
-    console.log("----------------------------------------------------");
 
     return Object.values(response.data.query.pages)[0];
   } catch (error) {
@@ -80,8 +92,6 @@ export const fetchGoodArticles = async () => {
         cmlimit: 10,
       },
     });
-    console.log("GOOART  : ", response.data.query.categorymembers);
-    console.log("----------------------------------------------------");
 
     return response.data.query.categorymembers;
   } catch (error) {
@@ -103,8 +113,6 @@ export const fetchImageUrl = async (imageTitle) => {
       },
     });
     const page = Object.values(response.data.query.pages)[0];
-    console.log("IMAGE URL  : ", page.imageinfo);
-    console.log("----------------------------------------------------");
 
     return page.imageinfo ? page.imageinfo[0].url : null;
   } catch (error) {

@@ -11,7 +11,7 @@ const PlantDataComponent = () => {
   const [plantPortal, setPlantPortal] = useState([]);
   const [featuredArticle, setFeaturedArticle] = useState(null);
   const [goodArticles, setGoodArticles] = useState([]);
-  const [selectedPlant, setSelectedPlant] = useState("Rose"); // Default to 'Rose'
+  const [selectedPlant, setSelectedPlant] = useState("Mango"); // Default to 'Rose'
   const [plantData, setPlantData] = useState(null);
   const [imageUrls, setImageUrls] = useState([]);
   const [loading, setLoading] = useState(false); // For loading state
