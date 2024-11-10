@@ -1,5 +1,3 @@
-// PlantComponent.js
-
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import "./content.css";
@@ -11,6 +9,9 @@ const PlantComponent = ({ title, onDelete }) => {
   const [galleryImages, setGalleryImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showAdditionalSections, setShowAdditionalSections] = useState(false);
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,7 +20,7 @@ const PlantComponent = ({ title, onDelete }) => {
 
       try {
         const [textData, imageData] = await Promise.all([
-          fetchPlantTextData(title),
+          fetchPlantTextData(title, 4), // Fetch only the first 4 sections
           fetchPlantImageData(title),
         ]);
 
@@ -31,8 +32,8 @@ const PlantComponent = ({ title, onDelete }) => {
         }
 
         if (imageData && imageData.length > 0) {
-          setThumbnail(imageData[0]); // Use the first image as the thumbnail
-          setGalleryImages(imageData.slice(1)); // Use remaining images for the gallery
+          setThumbnail(imageData[0]);
+          setGalleryImages(imageData.slice(1));
         } else {
           setGalleryImages([]);
         }
@@ -46,6 +47,30 @@ const PlantComponent = ({ title, onDelete }) => {
 
     fetchData();
   }, [title]);
+
+  const toggleSections = () => {
+    setShowAdditionalSections((prev) => !prev);
+  };
+
+  const openGallery = (index) => {
+    setActiveImageIndex(index);
+    setGalleryOpen(true);
+  };
+
+  const closeGallery = () => {
+    setGalleryOpen(false);
+  };
+
+  const nextImage = () => {
+    setActiveImageIndex((prevIndex) => (prevIndex + 1) % galleryImages.length);
+  };
+
+  const prevImage = () => {
+    setActiveImageIndex(
+      (prevIndex) =>
+        (prevIndex - 1 + galleryImages.length) % galleryImages.length
+    );
+  };
 
   if (loading) {
     return <div className="loading-animation">Loading...</div>;
@@ -67,19 +92,39 @@ const PlantComponent = ({ title, onDelete }) => {
                 src={`https://en.wikipedia.org/wiki/Special:FilePath/${thumbnail}`}
                 alt={`${title} thumbnail`}
                 className="thumbnail-image"
+                onClick={() => openGallery(0)}
               />
             </div>
           )}
 
           <div className="content">
-            {/* Render each section individually */}
-            {Object.entries(plantSections).map(
-              ([sectionTitle, sectionContent]) => (
-                <div key={sectionTitle} className="section">
-                  <h2>{sectionTitle.replace(/_/g, " ")}</h2>
-                  <pre className="text-content">{sectionContent}</pre>
-                </div>
-              )
+            {plantSections["description"] && (
+              <div className="section">
+                <h2>Description</h2>
+                <pre className="text-content">
+                  {plantSections["description"]}
+                </pre>
+              </div>
+            )}
+
+            <button
+              className="expand-button large-button"
+              onClick={toggleSections}
+            >
+              {showAdditionalSections ? "Hide Details" : "Show More Details"}
+            </button>
+
+            {showAdditionalSections && (
+              <>
+                {Object.entries(plantSections)
+                  .slice(1, 4) // Show only the first 4 sections after description
+                  .map(([sectionTitle, sectionContent]) => (
+                    <div key={sectionTitle} className="section">
+                      <h2>{sectionTitle.replace(/_/g, " ")}</h2>
+                      <pre className="text-content">{sectionContent}</pre>
+                    </div>
+                  ))}
+              </>
             )}
           </div>
 
@@ -93,10 +138,30 @@ const PlantComponent = ({ title, onDelete }) => {
                     src={`https://en.wikipedia.org/wiki/Special:FilePath/${image}`}
                     alt={`${title} gallery image ${index + 1}`}
                     className="gallery-image"
-                    loading="lazy" // Lazy load gallery images for performance
+                    loading="lazy"
+                    onClick={() => openGallery(index)}
                   />
                 ))}
               </div>
+            </div>
+          )}
+
+          {galleryOpen && (
+            <div className="gallery-modal">
+              <button className="close-button" onClick={closeGallery}>
+                &times;
+              </button>
+              <img
+                src={`https://en.wikipedia.org/wiki/Special:FilePath/${galleryImages[activeImageIndex]}`}
+                alt={`Gallery Image ${activeImageIndex + 1}`}
+                className="modal-image"
+              />
+              <button className="prev-button" onClick={prevImage}>
+                &lt;
+              </button>
+              <button className="next-button" onClick={nextImage}>
+                &gt;
+              </button>
             </div>
           )}
         </>

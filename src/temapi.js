@@ -1,5 +1,3 @@
-// temapi.js
-
 import axios from "axios";
 import { htmlToText } from "html-to-text";
 
@@ -33,23 +31,21 @@ const convertHtmlToText = (html) => {
     .trim();
 };
 
-// Fetch text data for each section and store by section title
 export const fetchPlantTextData = async (title) => {
   try {
     const response = await axios.get(BASE_URL, {
       params: {
         action: "parse",
         format: "json",
-        origin: "*", // Required for CORS support
+        origin: "*",
         page: title,
         prop: "sections|text",
       },
     });
 
-    // Check if 'parse' and 'sections' exist
     if (!response.data.parse || !response.data.parse.sections) {
       console.warn(`No sections found for "${title}"`);
-      return null; // Indicate that the page is missing or has no sections
+      return null;
     }
 
     const sections = response.data.parse.sections.filter(
@@ -58,19 +54,17 @@ export const fetchPlantTextData = async (title) => {
 
     if (sections.length === 0) {
       console.warn(`No valid sections found for "${title}"`);
-      return null; // No relevant sections
+      return null;
     }
 
     const sectionTextData = await fetchSectionsText(title, sections);
-
     return sectionTextData;
   } catch (error) {
     console.error(`Error fetching text data for "${title}":`, error);
-    return null; // Indicate failure
+    return null;
   }
 };
 
-// Helper function to fetch text for each section and store it with the section title as key
 const fetchSectionsText = async (title, sections) => {
   const sectionTextData = {};
 
@@ -90,7 +84,7 @@ const fetchSectionsText = async (title, sections) => {
       const sectionHtml = response.data.parse.text["*"];
       const cleanText = convertHtmlToText(sectionHtml);
       const cleanTitle = section.line.replace(/\s+/g, "_").toLowerCase();
-      sectionTextData[cleanTitle] = cleanText; // Store each section's text using section title as the key
+      sectionTextData[cleanTitle] = cleanText;
     } catch (error) {
       console.error(
         `Error fetching section ${section.index} for "${title}":`,
@@ -102,7 +96,6 @@ const fetchSectionsText = async (title, sections) => {
   return sectionTextData;
 };
 
-// Fetch image data, including a thumbnail and gallery images if available
 export const fetchPlantImageData = async (title) => {
   try {
     const response = await axios.get(BASE_URL, {
@@ -112,7 +105,7 @@ export const fetchPlantImageData = async (title) => {
         origin: "*",
         titles: title,
         prop: "images",
-        imlimit: 50, // Increase the limit to fetch more images
+        imlimit: 50,
       },
     });
 
@@ -125,10 +118,13 @@ export const fetchPlantImageData = async (title) => {
       return [];
     }
 
-    // Filter to include only valid image types
     const validImages = images
       .map((image) => image.title)
-      .filter((imageName) => /\.(jpg|jpeg|png|gif)$/i.test(imageName));
+      .filter(
+        (imageName) =>
+          /\.(jpg|jpeg|png|gif)$/i.test(imageName) &&
+          imageName.toLowerCase().includes(title.toLowerCase())
+      );
 
     return validImages;
   } catch (error) {
