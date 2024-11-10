@@ -117,7 +117,8 @@ const PlantComponent = ({ title, onDelete }) => {
             {showAdditionalSections && (
               <>
                 {Object.entries(plantSections)
-                  .slice(1, 4) // Show only the first 4 sections after description
+                  .filter(([sectionTitle]) => sectionTitle !== "description") // Exclude description
+                  .slice(0, 3) // Limit to 3 more sections for a total of 4
                   .map(([sectionTitle, sectionContent]) => (
                     <div key={sectionTitle} className="section">
                       <h2>{sectionTitle.replace(/_/g, " ")}</h2>
@@ -148,7 +149,10 @@ const PlantComponent = ({ title, onDelete }) => {
 
           {galleryOpen && (
             <div className="gallery-modal">
-              <button className="close-button" onClick={closeGallery}>
+              <button
+                className="close-button large-button"
+                onClick={closeGallery}
+              >
                 &times;
               </button>
               <img
@@ -156,10 +160,10 @@ const PlantComponent = ({ title, onDelete }) => {
                 alt={`Gallery Image ${activeImageIndex + 1}`}
                 className="modal-image"
               />
-              <button className="prev-button" onClick={prevImage}>
+              <button className="prev-button large-button" onClick={prevImage}>
                 &lt;
               </button>
-              <button className="next-button" onClick={nextImage}>
+              <button className="next-button large-button" onClick={nextImage}>
                 &gt;
               </button>
             </div>

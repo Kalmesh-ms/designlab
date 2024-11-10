@@ -52,12 +52,11 @@ export const fetchPlantTextData = async (title) => {
       (section) => !excludedSections.includes(section.line)
     );
 
-    if (sections.length === 0) {
-      console.warn(`No valid sections found for "${title}"`);
-      return null;
-    }
+    const sectionTextData = await fetchSectionsText(
+      title,
+      sections.slice(0, 5)
+    );
 
-    const sectionTextData = await fetchSectionsText(title, sections);
     return sectionTextData;
   } catch (error) {
     console.error(`Error fetching text data for "${title}":`, error);
