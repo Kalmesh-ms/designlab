@@ -1,3 +1,4 @@
+// tempApi.js
 import axios from "axios";
 import { htmlToText } from "html-to-text";
 
@@ -8,9 +9,9 @@ const excludedSections = [
   "See also",
   "Further reading",
   "Other sources",
-]; // Exclude irrelevant sections
+];
 
-// Helper to convert HTML to plain text
+// Helper function to convert HTML to plain text
 const convertHtmlToText = (html) => {
   return htmlToText(html, {
     wordwrap: null,
@@ -31,6 +32,7 @@ const convertHtmlToText = (html) => {
     .trim();
 };
 
+// Function to fetch plant text data from Wikipedia API in a single request
 export const fetchPlantTextData = async (title) => {
   try {
     const response = await axios.get(BASE_URL, {
@@ -39,62 +41,31 @@ export const fetchPlantTextData = async (title) => {
         format: "json",
         origin: "*",
         page: title,
-        prop: "sections|text",
+        prop: "text",
       },
     });
 
-    if (!response.data.parse || !response.data.parse.sections) {
-      console.warn(`No sections found for "${title}"`);
-      return null;
-    }
+    const parsedText = response.data.parse?.text["*"];
+    if (!parsedText) return null;
 
-    const sections = response.data.parse.sections.filter(
-      (section) => !excludedSections.includes(section.line)
-    );
+    // Convert HTML to plain text and filter out unwanted sections
+    const cleanText = convertHtmlToText(parsedText);
+    const filteredText = cleanText
+      .split("\n")
+      .filter(
+        (line) =>
+          !excludedSections.some((excluded) => line.startsWith(excluded))
+      )
+      .join("\n");
 
-    const sectionTextData = await fetchSectionsText(
-      title,
-      sections.slice(0, 5)
-    );
-
-    return sectionTextData;
+    return filteredText;
   } catch (error) {
     console.error(`Error fetching text data for "${title}":`, error);
     return null;
   }
 };
 
-const fetchSectionsText = async (title, sections) => {
-  const sectionTextData = {};
-
-  for (const section of sections) {
-    try {
-      const response = await axios.get(BASE_URL, {
-        params: {
-          action: "parse",
-          format: "json",
-          origin: "*",
-          page: title,
-          prop: "text",
-          section: section.index,
-        },
-      });
-
-      const sectionHtml = response.data.parse.text["*"];
-      const cleanText = convertHtmlToText(sectionHtml);
-      const cleanTitle = section.line.replace(/\s+/g, "_").toLowerCase();
-      sectionTextData[cleanTitle] = cleanText;
-    } catch (error) {
-      console.error(
-        `Error fetching section ${section.index} for "${title}":`,
-        error
-      );
-    }
-  }
-
-  return sectionTextData;
-};
-
+// Function to fetch plant image data from Wikipedia API with limited image results
 export const fetchPlantImageData = async (title) => {
   try {
     const response = await axios.get(BASE_URL, {
@@ -104,7 +75,7 @@ export const fetchPlantImageData = async (title) => {
         origin: "*",
         titles: title,
         prop: "images",
-        imlimit: 50,
+        imlimit: 10, // Limit to 10 images for faster response
       },
     });
 
@@ -119,11 +90,7 @@ export const fetchPlantImageData = async (title) => {
 
     const validImages = images
       .map((image) => image.title)
-      .filter(
-        (imageName) =>
-          /\.(jpg|jpeg|png|gif)$/i.test(imageName) &&
-          imageName.toLowerCase().includes(title.toLowerCase())
-      );
+      .filter((imageName) => /\.(jpg|jpeg|png)$/i.test(imageName));
 
     return validImages;
   } catch (error) {
