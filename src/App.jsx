@@ -15,7 +15,7 @@ const App = () => {
       return;
     }
 
-    setPlants((prevPlants) => [...prevPlants, title]);
+    setPlants((prevPlants) => [title, ...prevPlants]);
   };
 
   const handleDelete = (titleToDelete) => {

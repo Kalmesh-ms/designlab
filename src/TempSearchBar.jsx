@@ -2,8 +2,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { useQuery } from "react-query";
-import { fetchPlantTextData, fetchPlantImageData } from "./tempApi";
-import "./tempSearchBar.css";
+import { fetchPlantTextData, fetchPlantImageData } from "./temapi";
 
 const TempSearchBar = ({ onResult }) => {
   const [input, setInput] = useState("");
