@@ -1,4 +1,3 @@
-// tempApi.js
 import axios from "axios";
 import { htmlToText } from "html-to-text";
 
@@ -9,9 +8,9 @@ const excludedSections = [
   "See also",
   "Further reading",
   "Other sources",
-];
+]; // Exclude irrelevant sections
 
-// Helper function to convert HTML to plain text
+// Helper to convert HTML to plain text
 const convertHtmlToText = (html) => {
   return htmlToText(html, {
     wordwrap: null,
@@ -32,40 +31,102 @@ const convertHtmlToText = (html) => {
     .trim();
 };
 
-// Function to fetch plant text data from Wikipedia API in a single request
 export const fetchPlantTextData = async (title) => {
   try {
+    // Fetch the entire page's content in one call
     const response = await axios.get(BASE_URL, {
       params: {
         action: "parse",
         format: "json",
         origin: "*",
         page: title,
-        prop: "text",
+        prop: "text|sections",
       },
     });
 
-    const parsedText = response.data.parse?.text["*"];
-    if (!parsedText) return null;
+    if (!response.data.parse) {
+      console.warn(`No data found for "${title}"`);
+      return null;
+    }
 
-    // Convert HTML to plain text and filter out unwanted sections
-    const cleanText = convertHtmlToText(parsedText);
-    const filteredText = cleanText
-      .split("\n")
-      .filter(
-        (line) =>
-          !excludedSections.some((excluded) => line.startsWith(excluded))
-      )
-      .join("\n");
+    const sections = response.data.parse.sections.filter(
+      (section) => !excludedSections.includes(section.line)
+    );
 
-    return filteredText;
+    if (sections.length === 0) {
+      console.warn(`No valid sections found for "${title}"`);
+      return null;
+    }
+
+    const pageHtml = response.data.parse.text["*"]; // Full page HTML
+    const sectionTextData = extractSectionsText(pageHtml, sections);
+    return sectionTextData;
   } catch (error) {
     console.error(`Error fetching text data for "${title}":`, error);
     return null;
   }
 };
 
-// Function to fetch plant image data from Wikipedia API with limited image results
+// Function to process the full HTML and extract relevant section text
+const extractSectionsText = (pageHtml, sections) => {
+  const sectionTextData = {};
+
+  sections.forEach((section) => {
+    try {
+      const sectionTitle = section.line;
+      const cleanTitle = sectionTitle.replace(/\s+/g, "_").toLowerCase();
+
+      // Create a regex to extract the section's content
+      const sectionStartRegex = new RegExp(
+        `<h\\d[^>]*>${sectionTitle.replace(
+          /[.*+?^${}()|[\]\\]/g,
+          "\\$&"
+        )}.*?<\\/h\\d>`,
+        "i"
+      );
+
+      const sectionStartMatch = pageHtml.match(sectionStartRegex);
+
+      if (sectionStartMatch) {
+        const sectionStartIndex = sectionStartMatch.index;
+        const nextSectionStartIndex = findNextSectionIndex(
+          pageHtml,
+          sectionStartIndex,
+          sectionTitle
+        );
+
+        const sectionHtml = pageHtml.substring(
+          sectionStartIndex,
+          nextSectionStartIndex
+        );
+
+        const cleanText = convertHtmlToText(sectionHtml);
+        sectionTextData[cleanTitle] = cleanText;
+      }
+    } catch (error) {
+      console.error(`Error processing section "${section.line}":`, error);
+    }
+  });
+
+  return sectionTextData;
+};
+
+// Helper to find the next section's start index
+const findNextSectionIndex = (html, currentIndex) => {
+  const sectionRegex = /<h(\d)[^>]*>(.*?)<\/h\1>/gi;
+  let match;
+
+  while ((match = sectionRegex.exec(html))) {
+    const sectionIndex = match.index;
+
+    if (sectionIndex > currentIndex) {
+      return sectionIndex;
+    }
+  }
+
+  return html.length; // Default to the end of the HTML
+};
+
 export const fetchPlantImageData = async (title) => {
   try {
     const response = await axios.get(BASE_URL, {
@@ -75,7 +136,7 @@ export const fetchPlantImageData = async (title) => {
         origin: "*",
         titles: title,
         prop: "images",
-        imlimit: 10, // Limit to 10 images for faster response
+        imlimit: 50,
       },
     });
 
@@ -90,7 +151,11 @@ export const fetchPlantImageData = async (title) => {
 
     const validImages = images
       .map((image) => image.title)
-      .filter((imageName) => /\.(jpg|jpeg|png)$/i.test(imageName));
+      .filter(
+        (imageName) =>
+          /\.(jpg|jpeg|png|gif)$/i.test(imageName) &&
+          imageName.toLowerCase().includes(title.toLowerCase())
+      );
 
     return validImages;
   } catch (error) {

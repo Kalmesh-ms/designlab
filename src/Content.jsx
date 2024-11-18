@@ -79,7 +79,7 @@ const PlantComponent = ({ title, onDelete }) => {
   return (
     <div className="plant-container">
       <button className="delete-button" onClick={() => onDelete(title)}>
-        &times;
+        <span className="material-icons">delete</span>
       </button>
       <h1 className="plant-title">{title}</h1>
       {error ? (
@@ -117,8 +117,7 @@ const PlantComponent = ({ title, onDelete }) => {
             {showAdditionalSections && (
               <>
                 {Object.entries(plantSections)
-                  .filter(([sectionTitle]) => sectionTitle !== "description") // Exclude description
-                  .slice(0, 3) // Limit to 3 more sections for a total of 4
+                  .slice(1, 4) // Show only the first 4 sections after description
                   .map(([sectionTitle, sectionContent]) => (
                     <div key={sectionTitle} className="section">
                       <h2>{sectionTitle.replace(/_/g, " ")}</h2>
@@ -149,22 +148,19 @@ const PlantComponent = ({ title, onDelete }) => {
 
           {galleryOpen && (
             <div className="gallery-modal">
-              <button
-                className="close-button large-button"
-                onClick={closeGallery}
-              >
-                &times;
+              <button className="close-button right" onClick={closeGallery}>
+                <span className="material-icons modal-btn ">close</span>
               </button>
               <img
                 src={`https://en.wikipedia.org/wiki/Special:FilePath/${galleryImages[activeImageIndex]}`}
                 alt={`Gallery Image ${activeImageIndex + 1}`}
                 className="modal-image"
               />
-              <button className="prev-button large-button" onClick={prevImage}>
-                &lt;
+              <button className="prev-button" onClick={prevImage}>
+                <span className="material-icons modal-btn ">arrow_back</span>
               </button>
-              <button className="next-button large-button" onClick={nextImage}>
-                &gt;
+              <button className="next-button right" onClick={nextImage}>
+                <span className="material-icons modal-btn ">arrow_forward</span>
               </button>
             </div>
           )}
