@@ -41,10 +41,13 @@
 /* NAV BAR -------------------- */
 
 .navbar {
+  position: sticky;
+  top: 0px;
   padding: 20px 50px;
   box-sizing: border-box;
   transition: all 5ms ease;
   backdrop-filter: blur(7px);
+  z-index: 10;
 }
 .links {
   list-style: none;
