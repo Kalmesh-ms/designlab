@@ -46,7 +46,7 @@
   padding: 20px 50px;
   box-sizing: border-box;
   transition: all 5ms ease;
-  backdrop-filter: blur(7px);
+  backdrop-filter: blur(14px);
   z-index: 10;
 }
 .links {

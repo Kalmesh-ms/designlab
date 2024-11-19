@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { useState, useEffect, useCallback } from "react";
-import PlantComponent from "./Content";
+import PlantComponent from "./Components/PlantComponent/PlantComponent";
 import "./app.css";
 
 const App = ({ searchQuery }) => {
